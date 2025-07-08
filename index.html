@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chácara Pandora - Seu Espaço de Lazer Perfeito!</title>
+    <link rel="icon" href="./imagens/favicon.ico" type="image/x-icon">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        // Tailwind CSS configuration (keep inline for immediate loading)
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        'pandora-green': '#4CAF50', // Verde para natureza/fundos
+                        'pandora-blue': '#2196F3',  // Azul para piscina/destaques
+                        'pandora-yellow': '#FFC107',// Amarelo para botões/títulos
+                        'pandora-red': '#F44336',   // Vermelho para alertas/promoções
+                        'pandora-text-light': '#FFFFFF',
+                        'pandora-text-dark': '#333333',
+                        'pandora-bg-light': '#F8F8F8',
+                        'pandora-bg-dark': '#EEEEEE',
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body class="bg-pandora-bg-light text-pandora-text-dark min-h-screen flex flex-col">
+    <header class="text-pandora-text-light p-4 shadow-lg flex flex-col sm:flex-row justify-between items-center rounded-b-lg">
+        <div class="flex items-center mb-4 sm:mb-0">
+            <h1 class="text-3xl font-bold">Chácara Pandora</h1>
+        </div>
+        <nav>
+            <ul class="flex flex-wrap justify-center space-x-4 sm:space-x-6">
+                <li><a href="#" id="nav-home" class="nav-item text-pandora-text-light hover:text-pandora-yellow font-semibold transition duration-300 py-2 px-3 rounded-md">Home</a></li>
+                <li><a href="#" id="nav-galeria" class="nav-item text-pandora-text-light hover:text-pandora-yellow font-semibold transition duration-300 py-2 px-3 rounded-md">Galeria</a></li>
+                <li><a href="#" id="nav-reservas" class="nav-item text-pandora-text-light hover:text-pandora-yellow font-semibold transition duration-300 py-2 px-3 rounded-md active">Reservas</a></li>
+                <li><a href="#" id="nav-delivery" class="nav-item text-pandora-text-light hover:text-pandora-yellow font-semibold transition duration-300 py-2 px-3 rounded-md">Delivery</a></li>
+                <li><a href="#" id="nav-contato" class="nav-item text-pandora-text-light hover:text-pandora-yellow font-semibold transition duration-300 py-2 px-3 rounded-md">Contato</a></li>
+                <li><a href="#" id="nav-parceria" class="nav-item text-pandora-text-light hover:text-pandora-yellow font-semibold transition duration-300 py-2 px-3 rounded-md">Parceria</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto p-6 flex flex-col flex-grow">
+        <section id="reservas-section" class="bg-white p-6 rounded-xl shadow-md mb-8">
+            <h2 class="text-3xl font-bold text-pandora-green mb-6 text-center">Garanta Sua Data na Chácara Pandora!</h2>
+            <p class="text-center text-lg mb-8">Escolha a data ideal para seu evento no calendário abaixo. Uma entrada de 50% garante sua reserva!</p>
+
+            <div class="calendar-container max-w-2xl mx-auto bg-white rounded-xl shadow-lg overflow-hidden p-6 border border-gray-200">
+                <div class="calendar-header flex justify-between items-center pb-4 mb-4 border-b border-gray-300">
+                    <button id="prevMonth" class="nav-button bg-pandora-blue text-pandora-text-light px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-600 transition duration-300">&lt;</button>
+                    <h2 id="currentMonthYear" class="text-2xl font-bold text-pandora-green">Mês Ano</h2>
+                    <button id="nextMonth" class="nav-button bg-pandora-blue text-pandora-text-light px-4 py-2 rounded-lg text-xl font-bold hover:bg-blue-600 transition duration-300">&gt;</button>
+                </div>
+                <div class="calendar-weekdays grid grid-cols-7 gap-2 text-center font-semibold text-gray-700 pb-2 border-b border-gray-300">
+                    <div>Dom</div>
+                    <div>Seg</div>
+                    <div>Ter</div>
+                    <div>Qua</div>
+                    <div>Qui</div>
+                    <div>Sex</div>
+                    <div>Sáb</div>
+                </div>
+                <div class="calendar-days grid grid-cols-7 gap-2 text-center mt-4" id="calendarDays">
+                    </div>
+            </div>
+
+            <div class="booking-details bg-pandora-bg-dark p-6 rounded-xl mt-8 shadow-md border border-gray-200 max-w-2xl mx-auto text-left">
+                <h4 class="text-2xl font-bold text-pandora-blue mb-4 text-center">Sua Seleção para Reserva:</h4>
+                <p class="text-lg mb-2">Data Escolhida: <span id="selectedDateDisplay" class="font-semibold text-pandora-text-dark">Nenhuma</span></p>
+                <p class="text-lg mb-4">Valor Estimado: <span id="estimatedPriceDisplay" class="font-bold text-pandora-red text-xl">R$ 0,00</span></p>
+                <button id="proceedToBooking" class="w-full bg-pandora-yellow text-pandora-text-dark font-bold py-3 px-6 rounded-lg shadow-md hover:bg-yellow-400 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Finalizar Reserva (Pagamento 50%)
+                </button>
+            </div>
+        </section>
+
+        <section id="galeria-section" class="bg-white p-6 rounded-xl shadow-md mb-8 hidden">
+            <h2 class="text-3xl font-bold text-pandora-green mb-6 text-center">Conheça a Chácara Pandora por Fotos!</h2>
+            <p class="text-center text-lg mb-8">Passeie por nossa galeria e imagine seu dia perfeito aqui.</p>
+
+            <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                </div>
+            <div id="galleryOverlay" class="gallery-overlay hidden">
+                <span id="closeGalleryBtn" class="close-btn">&times;</span>
+                <span id="prevGalleryBtn" class="nav-arrow left">&lt;</span>
+                <img id="fullGalleryImage" src="" alt="Imagem ampliada da galeria">
+                <span id="nextGalleryBtn" class="nav-arrow right">&gt;</span>
+            </div>
+        </section>
+
+        <section id="delivery-section" class="bg-white p-6 rounded-xl shadow-md mb-8 hidden">
+            <h2 class="text-3xl font-bold text-pandora-green mb-6 text-center">Bebidas Entregues no Local!</h2>
+            <p class="text-center text-lg mb-8">Selecione suas bebidas favoritas e receba-as diretamente na Chácara Pandora.</p>
+
+            <div class="flex flex-col gap-8">
+                <div class="w-full bg-pandora-bg-dark p-6 rounded-xl shadow-md border border-gray-200 relative overflow-hidden">
+                    <h3 class="text-xl font-bold text-pandora-blue mb-4 text-center">Nossas Bebidas em Destaque</h3>
+                    <div id="carousel-container" class="flex transition-transform duration-500 ease-in-out">
+                        </div>
+                    <button id="carousel-prev" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-pandora-blue text-pandora-text-light p-2 rounded-full text-2xl hover:bg-blue-600 focus:outline-none z-10">&lt;</button>
+                    <button id="carousel-next" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-pandora-blue text-pandora-text-light p-2 rounded-full text-2xl hover:bg-blue-600 focus:outline-none z-10">&gt;</button>
+                </div>
+
+                <div class="w-full">
+                    <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        </div>
+                </div>
+            </div>
+
+            <aside class="cart-container w-full bg-pandora-bg-dark p-6 rounded-xl shadow-md border border-gray-200 mt-8 max-w-2xl mx-auto">
+                <h3 class="text-2xl font-bold text-pandora-green mb-6 text-center">Seu Carrinho</h3>
+                <ul id="cart-items" class="divide-y divide-gray-300">
+                    <li class="py-3 text-center text-gray-500">Nenhum item no carrinho.</li>
+                </ul>
+                <div class="cart-summary mt-6 pt-4 border-t border-dashed border-gray-400 text-right">
+                    <p class="text-2xl font-bold text-pandora-green">Total: <span id="cart-total" class="text-pandora-yellow">R$ 0,00</span></p>
+                </div>
+                <button id="checkout-btn" class="w-full bg-pandora-yellow text-pandora-text-dark font-bold py-3 px-6 mt-6 rounded-lg shadow-md hover:bg-yellow-400 transition duration-300 disabled:opacity-50 disabled:cursor-not-allowed">
+                    Finalizar Pedido
+                </button>
+            </aside>
+        </section>
+    </main>
+
+    <footer class="bg-pandora-green text-pandora-text-light p-6 text-center mt-8 rounded-t-lg shadow-lg">
+        <p class="text-lg">&copy; 2025 Chácara Pandora. Todos os direitos reservados.</p>
+        <p class="text-md mt-2">WhatsApp: <a href="https://wa.me/5592991456365" target="_blank" class="text-pandora-yellow hover:underline">(92) 99145-6365</a></p>
+    </footer>
+
+    <div id="bookingCheckoutModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full relative transform transition-all duration-300 scale-95 opacity-0" id="modalContent">
+            <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold" id="closeBookingModal">&times;</button>
+            <h3 class="text-2xl font-bold text-pandora-blue mb-6 text-center">Finalizar Reserva</h3>
+            <p class="text-gray-700 mb-4 text-center">Para prosseguir com sua reserva, por favor, preencha seus dados de contato:</p>
+
+            <form id="bookingContactForm" class="space-y-4">
+                <div>
+                    <label for="clientName" class="block text-sm font-medium text-gray-700 mb-1">Nome Completo:</label>
+                    <input type="text" id="clientName" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-pandora-blue focus:border-pandora-blue" required>
+                </div>
+                <div>
+                    <label for="clientPhone" class="block text-sm font-medium text-gray-700 mb-1">WhatsApp (com DDD):</label>
+                    <input type="tel" id="clientPhone" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-pandora-blue focus:border-pandora-blue" placeholder="(92) 99123-4567" required>
+                </div>
+                <div>
+                    <label for="clientEmail" class="block text-sm font-medium text-gray-700 mb-1">E-mail (Opcional):</label>
+                    <input type="email" id="clientEmail" class="mt-1 block w-full p-3 border border-gray-300 rounded-md shadow-sm focus:ring-pandora-blue focus:border-pandora-blue">
+                </div>
+
+                <p class="text-sm text-gray-600 mt-6 text-center">Você está reservando a Chácara Pandora para o dia: <span id="modalSelectedDate" class="font-bold text-pandora-blue"></span></p>
+                <p class="text-lg font-bold text-pandora-red text-center">Valor Estimado: <span id="modalEstimatedPrice"></span></p>
+
+                <button type="submit" class="w-full bg-pandora-green text-pandora-text-light font-bold py-3 px-4 rounded-md shadow-md hover:bg-green-600 transition duration-300 mt-6">
+                    Confirmar e Entrar em Contato
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <div id="contatoModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full relative transform transition-all duration-300 scale-95 opacity-0" id="contatoModalContent">
+            <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold" id="closeContatoModal">&times;</button>
+            <h3 class="text-2xl font-bold text-pandora-blue mb-6 text-center">Entre em Contato</h3>
+            <p class="text-gray-700 mb-4 text-center">Ficou com alguma dúvida ou precisa de mais informações?</p>
+
+            <div class="space-y-4 text-center mt-6">
+                <p class="text-lg font-bold text-pandora-green">Fale Conosco pelo WhatsApp:</p>
+                <p class="text-3xl font-bold text-pandora-blue">
+                    <a href="https://wa.me/5592991456365" target="_blank" class="text-pandora-yellow hover:underline">(92) 99145-6365</a>
+                </p>
+                <p class="text-md text-gray-600 mt-4">Estamos prontos para atender você em Itacoatiara, AM!</p>
+            </div>
+
+            <button id="closeContatoModalButton" class="w-full bg-pandora-yellow text-pandora-text-dark font-bold py-3 px-6 mt-6 rounded-lg shadow-md hover:bg-yellow-400 transition duration-300">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <div id="parceriaModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center hidden z-50">
+        <div class="bg-white p-8 rounded-lg shadow-xl max-w-md w-full relative transform transition-all duration-300 scale-95 opacity-0" id="parceriaModalContent">
+            <button class="absolute top-3 right-3 text-gray-500 hover:text-gray-800 text-2xl font-bold" id="closeParceriaModal">&times;</button>
+            <h3 class="text-2xl font-bold text-pandora-blue mb-6 text-center">Proposta de Parceria - Eventos com Pulseiras</h3>
+            <p class="text-gray-700 mb-4 text-center">Interessado em realizar seu evento na Chácara Pandora com cobrança na entrada via pulseiras?</p>
+
+            <div class="space-y-4 text-center">
+                <p class="text-lg font-semibold text-pandora-green">Detalhes da Proposta:</p>
+                <ul class="list-disc list-inside text-left mx-auto max-w-xs text-gray-700">
+                    <li>Aluguel do espaço com taxas flexíveis.</li>
+                    <li>Possibilidade de divisão de lucros por pulseira.</li>
+                    <li>Disponibilidade para eventos de médio e grande porte.</li>
+                    <li>Estrutura completa de lazer.</li>
+                </ul>
+                <p class="text-lg font-bold text-pandora-red mt-4">Valores a Negociar!</p>
+                <p class="text-md text-gray-600">Entre em contato diretamente para conversarmos sobre suas necessidades e fecharmos uma parceria de sucesso.</p>
+
+                <div class="mt-6">
+                    <p class="text-lg font-bold text-pandora-green">Meu Contato para Parcerias:</p>
+                    <p class="text-xl font-bold text-pandora-blue">WhatsApp: <a href="https://wa.me/5592991456365" target="_blank" class="text-pandora-yellow hover:underline">(92) 99145-6365</a></p>
+                </div>
+
+                <button id="closeParceriaModalButton" class="w-full bg-pandora-yellow text-pandora-text-dark font-bold py-3 px-6 mt-6 rounded-lg shadow-md hover:bg-yellow-400 transition duration-300">
+                    Entendi! Fechar
+                </button>
+            </div>
+        </div>
+    </div>
+
+   <script type="module" src="./js/constants.js"></script>
+<script type="module" src="./js/navigation.js"></script>
+<script type="module" src="./js/calendar.js"></script>
+<script type="module" src="./js/gallery.js"></script>
+<script type="module" src="./js/delivery.js"></script>
+<script type="module" src="./js/carousel.js"></script>
+</body>
+</html>
