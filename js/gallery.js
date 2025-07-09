@@ -12,29 +12,33 @@ document.addEventListener('DOMContentLoaded', () => {
 
     let currentImageIndex = 0;
 
-    // Validação de existência de elementos para evitar erros
-    if (!galleryGrid || !galleryOverlay || !fullGalleryImage || !closeGalleryBtn || !prevGalleryBtn || !nextGalleryBtn) {
-        console.warn("Um ou mais elementos HTML necessários para a galeria não foram encontrados. A galeria pode não funcionar corretamente.");
-        // Não retorna aqui para que o renderGallery ainda possa tentar adicionar imagens
+    // **IMPORTE IMPORTANTE:** Validação de existência de elementos para evitar erros
+    // Se algum desses elementos críticos não for encontrado, a galeria não funcionará.
+    // É crucial que os IDs no seu HTML correspondam a estes.
+    if (!galleryGrid) {
+        console.error("Erro: Elemento '#gallery-grid' não encontrado. A galeria não será renderizada.");
+        return; // Sai da função se o grid principal não existe
+    }
+    if (!galleryOverlay || !fullGalleryImage || !closeGalleryBtn || !prevGalleryBtn || !nextGalleryBtn) {
+        console.warn("Aviso: Um ou mais elementos do overlay da galeria (galleryOverlay, fullGalleryImage, closeGalleryBtn, prevGalleryBtn, nextGalleryBtn) não foram encontrados. O overlay pode não funcionar como esperado.");
+        // Não retorna aqui para que o renderGallery ainda possa tentar adicionar imagens ao grid.
     }
 
     function renderGallery() {
-        if (!galleryGrid) return; // Sai se o grid da galeria não for encontrado
-
         galleryGrid.innerHTML = ''; // Limpa o grid antes de renderizar
         GALLERY_IMAGES.forEach((image, index) => { // Usa GALLERY_IMAGES importado
             const imgContainer = document.createElement('div');
             imgContainer.classList.add('relative', 'group', 'overflow-hidden', 'rounded-lg', 'shadow-md');
-            
+
             const imgElement = document.createElement('img');
             imgElement.src = image.src;
             imgElement.alt = image.alt;
             imgElement.classList.add('w-full', 'h-48', 'object-cover', 'transition-transform', 'duration-300', 'group-hover:scale-105');
-            
+
             const imgOverlay = document.createElement('div');
-            imgOverlay.classList.add('absolute', 'inset-0', 'bg-black', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'opacity-0', 'group-hover:opacity-100', 'transition-opacity', 'duration-300', 'text-pandora-text-light', 'font-bold', 'text-xl');
+            imgOverlay.classList.add('absolute', 'inset-0', 'bg-black', 'bg-opacity-50', 'flex', 'items-center', 'justify-center', 'opacity-0', 'group-hover:opacity-100', 'transition-opacity', 'duration-300', 'text-white', 'font-bold', 'text-xl'); // Alterei de pandora-text-light para 'text-white' para generalizar se não tiver Tailwind configurado ou para visualização rápida.
             imgOverlay.textContent = 'Ver Detalhes';
-            
+
             imgContainer.appendChild(imgElement);
             imgContainer.appendChild(imgOverlay);
             galleryGrid.appendChild(imgContainer);
@@ -48,6 +52,9 @@ document.addEventListener('DOMContentLoaded', () => {
         updateGalleryOverlayImage();
         if (galleryOverlay) {
             galleryOverlay.classList.remove('hidden');
+            // Adiciona classe para visibilidade CSS. Certifique-se que 'gallery-overlay' no CSS lida com 'hidden'.
+            // OU, se você está usando display: flex/none:
+            // galleryOverlay.style.display = 'flex';
         }
     }
 
@@ -61,6 +68,8 @@ document.addEventListener('DOMContentLoaded', () => {
     function closeGalleryOverlay() {
         if (galleryOverlay) {
             galleryOverlay.classList.add('hidden');
+            // OU, se você está usando display: flex/none:
+            // galleryOverlay.style.display = 'none';
         }
     }
 
@@ -71,7 +80,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function showPrevImage() {
         currentImageIndex = (currentImageIndex - 1 + GALLERY_IMAGES.length) % GALLERY_IMAGES.length; // Usa GALLERY_IMAGES
-        updateGalleryOverlayImage();
+        updateGalleryImage();
     }
 
     // Event Listeners for the overlay (verificações de existência adicionadas)
@@ -85,8 +94,10 @@ document.addEventListener('DOMContentLoaded', () => {
         prevGalleryBtn.addEventListener('click', showPrevImage);
     }
     if (galleryOverlay) {
-        // Fechar overlay ao clicar fora da imagem
+        // Fechar overlay ao clicar fora da imagem, mas não nos elementos filhos
         galleryOverlay.addEventListener('click', (e) => {
+            // Verifica se o clique ocorreu EXATAMENTE no fundo do overlay,
+            // e não na imagem ou nos botões de navegação.
             if (e.target === galleryOverlay) {
                 closeGalleryOverlay();
             }

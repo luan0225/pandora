@@ -68,7 +68,7 @@
                     <div>Sáb</div>
                 </div>
                 <div class="calendar-days grid grid-cols-7 gap-2 text-center mt-4" id="calendarDays">
-                    </div>
+                </div>
             </div>
 
             <div class="booking-details bg-pandora-bg-dark p-6 rounded-xl mt-8 shadow-md border border-gray-200 max-w-2xl mx-auto text-left">
@@ -86,7 +86,7 @@
             <p class="text-center text-lg mb-8">Passeie por nossa galeria e imagine seu dia perfeito aqui.</p>
 
             <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-                </div>
+            </div>
             <div id="galleryOverlay" class="gallery-overlay hidden">
                 <span id="closeGalleryBtn" class="close-btn">&times;</span>
                 <span id="prevGalleryBtn" class="nav-arrow left">&lt;</span>
@@ -95,22 +95,22 @@
             </div>
         </section>
 
-        <section id="delivery-section" class="bg-white p-6 rounded-xl shadow-md mb-8 hidden">
+        <section id="delivery-section" class="bg-white p-6 rounded-xl shadow-md mb-8">
             <h2 class="text-3xl font-bold text-pandora-green mb-6 text-center">Bebidas Entregues no Local!</h2>
             <p class="text-center text-lg mb-8">Selecione suas bebidas favoritas e receba-as diretamente na Chácara Pandora.</p>
 
             <div class="flex flex-col gap-8">
                 <div class="w-full bg-pandora-bg-dark p-6 rounded-xl shadow-md border border-gray-200 relative overflow-hidden">
                     <h3 class="text-xl font-bold text-pandora-blue mb-4 text-center">Nossas Bebidas em Destaque</h3>
-                    <div id="carousel-container" class="flex transition-transform duration-500 ease-in-out">
-                        </div>
-                    <button id="carousel-prev" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-pandora-blue text-pandora-text-light p-2 rounded-full text-2xl hover:bg-blue-600 focus:outline-none z-10">&lt;</button>
-                    <button id="carousel-next" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-pandora-blue text-pandora-text-light p-2 rounded-full text-2xl hover:bg-blue-600 focus:outline-none z-10">&gt;</button>
+                    <div id="delivery-carousel-container" class="flex transition-transform duration-500 ease-in-out">
+                    </div>
+                    <button id="delivery-carousel-prev" class="absolute top-1/2 left-2 transform -translate-y-1/2 bg-pandora-blue text-pandora-text-light p-2 rounded-full text-2xl hover:bg-blue-600 focus:outline-none z-10">&lt;</button>
+                    <button id="delivery-carousel-next" class="absolute top-1/2 right-2 transform -translate-y-1/2 bg-pandora-blue text-pandora-text-light p-2 rounded-full text-2xl hover:bg-blue-600 focus:outline-none z-10">&gt;</button>
                 </div>
 
                 <div class="w-full">
                     <div id="products-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -213,11 +213,11 @@
         </div>
     </div>
 
-   <script type="module" src="./js/constants.js"></script>
-<script type="module" src="./js/navigation.js"></script>
-<script type="module" src="./js/calendar.js"></script>
-<script type="module" src="./js/gallery.js"></script>
-<script type="module" src="./js/delivery.js"></script>
-<script type="module" src="./js/carousel.js"></script>
+    <script type="module" src="./js/constants.js"></script>
+    <script type="module" src="./js/navigation.js"></script>
+    <script type="module" src="./js/calendar.js"></script>
+    <script type="module" src="./js/gallery.js"></script>
+    <script type="module" src="./js/delivery.js"></script>
+    <script type="module" src="./js/carousel.js"></script>
 </body>
 </html>

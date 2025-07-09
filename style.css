@@ -78,7 +78,7 @@ body {
 .carousel-item img {
     width: 100%;
     height: 300px; /* Altura fixa para as imagens do carrossel */
-    object-fit: contain; /* ALTERAÇÃO AQUI: Garante que a imagem inteira caiba sem cortar */
+    object-fit: contain; /* Garante que a imagem inteira caiba sem cortar */
     border-radius: 8px; /* Borda arredondada */
 }
 
@@ -91,7 +91,7 @@ body {
 
 @media (min-width: 1024px) {
     .carousel-item {
-        width: 33.33%; /* Mostra 3 imagens por vez em telas grandes */
+        width: 25%; /* Mostra 4 imagens por vez em telas grandes */
     }
 }
 
@@ -170,7 +170,7 @@ header h1, header nav a {
 .product-card img {
     width: 100%;
     height: 120px; /* Aumentei um pouco a altura para acomodar melhor as imagens */
-    object-fit: contain; /* ALTERAÇÃO AQUI: Garante que a imagem inteira caiba sem cortar */
+    object-fit: contain; /* Garante que a imagem inteira caiba sem cortar */
     border-radius: 0.375rem; /* rounded-md */
     margin-bottom: 0.75rem; /* mb-3 */
 }
@@ -179,83 +179,91 @@ header h1, header nav a {
     transform: translateY(-5px);
 }
 
-/* =================================================== */
-/* ESTILOS ESPECÍFICOS PARA DISPOSITIVOS MÓVEIS (CSS para Mobile) */
-/* =================================================== */
 
-/* Ajustes para telas muito pequenas (smartphones pequenos) */
 @media (max-width: 639px) { /* Corresponde ao breakpoint 'sm' do Tailwind, para alvos menores */
 
     /* Header: Reduzir tamanho do título principal em telas muito pequenas, se necessário */
     header h1 {
-        font-size: 2rem; /* De 3xl (3rem) para 2rem */
-        text-align: center; /* Centraliza o título no mobile */
-        width: 100%; /* Garante que o título ocupe a largura total antes da navegação */
+        font-size: 2rem;
+        text-align: center;
+        width: 100%;
     }
 
     /* Navegação: Ajustes para espaçamento e tamanho do texto dos itens de menu */
     header nav ul {
-        flex-direction: row; /* Mantém linha, mas permite quebra em múltiplas linhas */
+        flex-direction: row;
         justify-content: center;
         width: 100%;
-        margin-top: 0.5rem; /* Um pequeno espaçamento entre o título e a navegação */
+        margin-top: 0.5rem;
     }
     header nav ul li a {
-        padding-left: 0.5rem; /* Reduz o padding horizontal para caber mais itens */
+        padding-left: 0.5rem;
         padding-right: 0.5rem;
-        font-size: 0.875rem; /* text-sm (menor que o padrão, se necessário) */
-        white-space: nowrap; /* Evita quebra de linha em nomes de itens longos */
+        font-size: 0.875rem;
+        white-space: nowrap;
     }
 
     /* Calendário: O ponto mais crítico para mobile com 7 colunas */
+    /* REMOVIDO: overflow-x e min-width do calendar-container */
+    /* Apenas ajustamos o tamanho dos itens para caberem */
+    .calendar-container {
+        /* Remove o padding lateral extra que usamos para a rolagem */
+        padding: 0; 
+        /* Garante que o grid possa se auto-ajustar totalmente sem forçar rolagem */
+        overflow-x: hidden; 
+    }
+
     .calendar-weekdays > div {
-        font-size: 0.75rem; /* text-xs: Reduz o tamanho da fonte dos nomes dos dias da semana */
-        padding: 0.2rem; /* Reduz o padding */
+        /* Reduzindo ainda mais a fonte e o padding para que caiba */
+        font-size: 0.6rem; /* De 0.7rem para 0.6rem */
+        padding: 0.05rem; /* De 0.1rem para 0.05rem (muito pequeno, se for necessário) */
+        /* Garante que o texto não quebre em múltiplas linhas, se o nome do dia for muito longo */
+        white-space: nowrap; 
     }
     .calendar-days .calendar-day {
-        font-size: 0.875rem; /* text-sm: Reduz o tamanho da fonte dos números dos dias */
-        padding: 0.5rem; /* Reduz o padding dos dias para ajudar a caber */
+        /* Reduzindo ainda mais a fonte e o padding para que caiba */
+        font-size: 0.7rem; /* De 0.8rem para 0.7rem */
+        padding: 0.2rem; /* De 0.3rem para 0.2rem */
+        /* Isso ajuda se você tem bordas ou outras coisas dentro do dia */
+        box-sizing: border-box; 
     }
-    /* Se o calendário ainda ficar muito apertado, permita rolagem horizontal */
-    .calendar-container {
-        overflow-x: auto; /* Adiciona uma barra de rolagem horizontal se o conteúdo for muito largo */
-        -webkit-overflow-scrolling: touch; /* Suaviza a rolagem em dispositivos iOS */
-    }
-    /* E para que a rolagem funcione, precisamos garantir que o grid tenha uma largura "mínima" */
+    /* REMOVIDO: min-width do calendar-weekdays e calendar-days, pois queremos que eles se ajustem */
     .calendar-weekdays,
     .calendar-days {
-        min-width: 320px; /* Garante uma largura mínima para o grid do calendário para evitar colapso total */
-        /* Ajuste este valor se 320px ainda for pequeno ou muito grande para seu layout */
+        /* Não define min-width para permitir encolher ao máximo */
+        /* O gap deve ser ajustado para ser o menor possível, ou 0 */
+        gap: 0.1rem; /* Reduzindo o gap entre os dias */
     }
+
 
     /* Carrinho de Compras (Delivery): garantir que itens não se sobreponham em linha */
     .cart-container ul#cart-items li {
-        flex-direction: column; /* Empilha nome/quantidade e preço para melhor visualização */
-        align-items: flex-start; /* Alinha itens à esquerda */
+        flex-direction: column;
+        align-items: flex-start;
         text-align: left;
     }
     .cart-container ul#cart-items li span {
-        width: 100%; /* Ocupa largura total */
+        width: 100%;
     }
     .cart-container ul#cart-items li .remove-from-cart-btn {
-        margin-left: 0; /* Remove margem lateral, se houver */
-        margin-top: 0.5rem; /* Adiciona margem superior para separar do texto */
+        margin-left: 0;
+        margin-top: 0.5rem;
     }
 
     /* Botões grandes (Reservar, Finalizar Pedido): garantir que o texto caiba bem */
     #proceedToBooking, #checkout-btn {
-        font-size: 1rem; /* Reduz de xl para base */
+        font-size: 1rem;
         padding-left: 1rem;
         padding-right: 1rem;
     }
 
     /* Geral: Ajustes de padding para seções e containers em telas pequenas */
     main .container {
-        padding-left: 1rem; /* Reduz o padding geral do container principal */
+        padding-left: 1rem;
         padding-right: 1rem;
     }
     section {
-        padding: 1.5rem; /* Reduz o padding interno das seções (era p-6 = 2.5rem) */
+        padding: 1.5rem;
     }
 }
 
@@ -266,7 +274,7 @@ header h1, header nav a {
 
     /* Calendário: Pode manter os valores padrão do Tailwind aqui ou ajustar um pouco */
     .calendar-weekdays > div, .calendar-days .calendar-day {
-        font-size: 0.875rem; /* Mantém text-sm */
+        font-size: 0.875rem;
         padding: 0.6rem;
     }
 }
