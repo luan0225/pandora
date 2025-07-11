@@ -23,14 +23,13 @@ document.addEventListener('DOMContentLoaded', () => {
         return; // Sai do script se os elementos essenciais não existirem
     }
 
-
     let currentMonth = new Date().getMonth();
     let currentYear = new Date().getFullYear();
     let selectedDate = null; // Para armazenar a data selecionada pelo usuário
 
     // Preços de exemplo (ajuste conforme necessário)
     const BASE_PRICE_WEEKDAY = 180; // Preço base para dias de semana
-    const BASE_PRICE_WEEKEND = 200; // Preço base para fins de semana (Sábado/Domingo)
+    const BASE_PRICE_WEEKEND_FRISATSUN = 200; // Preço base para fins de semana (Sexta/Sábado/Domingo)
     const HOLIDAY_SURCHARGE = 200; // Sobretaxa para feriados (exemplo)
 
     /**
@@ -42,9 +41,10 @@ document.addEventListener('DOMContentLoaded', () => {
         let price = 0;
         const dayOfWeek = date.getDay(); // 0 = Domingo, 1 = Segunda, ..., 6 = Sábado
 
-        if (dayOfWeek === 0 || dayOfWeek === 6) { // Fim de semana (Domingo ou Sábado)
-            price = BASE_PRICE_WEEKEND;
-        } else { // Dia de semana
+        // Sexta (5), Sábado (6) ou Domingo (0)
+        if (dayOfWeek === 5 || dayOfWeek === 6 || dayOfWeek === 0) {
+            price = BASE_PRICE_WEEKEND_FRISATSUN;
+        } else { // Dia de semana (Segunda a Quinta)
             price = BASE_PRICE_WEEKDAY;
         }
 
@@ -53,6 +53,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         return price;
+    }
+
+    /**
+     * Verifica se uma data deve ser desabilitada (passada, reservada, ou adjacente a reservada).
+     * @param {Date} date - A data a ser verificada.
+     * @param {Date} today - A data atual (com hora zerada).
+     * @returns {boolean} - True se a data deve ser desabilitada, False caso contrário.
+     */
+    function isDateDisabled(date, today) {
+        const dateString = date.toISOString().slice(0, 10);
+
+        // Desabilita datas passadas
+        if (date < today) {
+            return true;
+        }
+
+        // Desabilita datas reservadas
+        if (RESERVED_DATES.includes(dateString)) {
+            return true;
+        }
+
+        // Desabilita o dia anterior e o dia seguinte a uma data reservada
+        const prevDay = new Date(date);
+        prevDay.setDate(date.getDate() - 1);
+        const prevDayString = prevDay.toISOString().slice(0, 10);
+
+        const nextDay = new Date(date);
+        nextDay.setDate(date.getDate() + 1);
+        const nextDayString = nextDay.toISOString().slice(0, 10);
+
+        // Apenas desabilita dias adjacentes se eles não forem feriados ou já reservados
+        // Isso evita que um dia reservado "desabilite" um feriado, por exemplo, que já tem seu próprio estilo
+        if (RESERVED_DATES.includes(prevDayString) || RESERVED_DATES.includes(nextDayString)) {
+            // Verifica se a data atual não é um feriado e nem está reservada.
+            // Se for feriado ou já reservada, ela já terá seu próprio estilo e não deve ser "indisponível por adjacência".
+            if (!isHoliday(date) && !RESERVED_DATES.includes(dateString)) {
+                 return true;
+            }
+        }
+        return false;
     }
 
     /**
@@ -85,22 +125,30 @@ document.addEventListener('DOMContentLoaded', () => {
             const today = new Date();
             today.setHours(0, 0, 0, 0); // Zera a hora para comparação
 
-            // Desabilita datas passadas
-            if (currentDate < today) {
-                dayDiv.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed');
+            const dateString = currentDate.toISOString().slice(0, 10); // Obtém a string da data para comparação
+
+            const isDisabled = isDateDisabled(currentDate, today);
+            const isActuallyReserved = RESERVED_DATES.includes(dateString); // Verifica se a data é *realmente* uma data reservada
+
+            if (isActuallyReserved) {
+                // Destaca os dias alugados em verde
+                dayDiv.classList.add('bg-green-500', 'text-white', 'font-bold', 'cursor-not-allowed', 'opacity-90');
+                dayDiv.title = 'Alugado';
+            } else if (isDisabled) {
+                dayDiv.classList.add('bg-gray-200', 'text-gray-400', 'cursor-not-allowed', 'opacity-80');
+                if (currentDate < today) {
+                    dayDiv.title = 'Data passada';
+                } else {
+                    dayDiv.title = 'Indisponível (próximo a data alugada)';
+                }
             } else {
                 dayDiv.classList.add('hover:bg-pandora-bg-dark', 'hover:shadow-md');
 
-                // Marca feriados ou datas já reservadas
-                const dateString = currentDate.toISOString().slice(0, 10);
+                // Marca feriados
                 if (isHoliday(currentDate)) { // Usa a função isHoliday importada
                     dayDiv.classList.add('bg-pandora-red', 'text-pandora-text-light', 'font-bold');
                     dayDiv.title = 'Feriado';
-                } else if (RESERVED_DATES.includes(dateString)) { // Usa a constante RESERVED_DATES importada
-                    dayDiv.classList.add('bg-gray-500', 'text-pandora-text-light', 'cursor-not-allowed', 'opacity-80');
-                    dayDiv.title = 'Reservado';
                 }
-
 
                 // Marca a data selecionada
                 if (selectedDate && currentDate.toDateString() === selectedDate.toDateString()) {
@@ -108,8 +156,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
 
                 dayDiv.addEventListener('click', () => {
-                    // Apenas permite selecionar datas futuras e não reservadas
-                    if (currentDate >= today && !RESERVED_DATES.includes(dateString)) {
+                    // Apenas permite selecionar datas futuras e não desabilitadas
+                    if (!isDisabled && !isActuallyReserved) { // Garante que não se pode clicar em dias alugados
                         selectedDate = currentDate;
                         updateBookingDetails();
                         renderCalendar(); // Renderiza novamente para atualizar a seleção visual
@@ -199,7 +247,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
         const whatsappMessage = `Olá, gostaria de reservar a Chácara Pandora para o dia ${selectedDate.toLocaleDateString('pt-br')} (Valor Estimado: ${estimatedPriceDisplay.textContent}). Meus dados: Nome: ${clientName}, WhatsApp: ${clientPhone}, E-mail: ${clientEmail || 'Não fornecido'}.`;
         const whatsappLink = `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(whatsappMessage)}`; // Usa WHATSAPP_NUMBER importado
-        
+
         window.open(whatsappLink, '_blank');
 
         // Opcional: Mostrar uma mensagem de sucesso e fechar o modal

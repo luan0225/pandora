@@ -4,6 +4,8 @@ export const WHATSAPP_NUMBER = '5592991456365'; // Seu número de WhatsApp
 
 export const RESERVED_DATES = [
     '2025-07-12', // Exemplo: Data alugada
+    '2025-07-25', // Exemplo: Data alugada
+    '2025-07-19', // Exemplo: Data alugada
 ];
 
 // --- IMPORTANTE: Caminhos das imagens ajustados para serem relativos ao index.html ---
